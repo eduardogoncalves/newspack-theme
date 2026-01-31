@@ -895,6 +895,16 @@ function newspack_register_meta() {
 
 	register_post_meta(
 		'post',
+		'newspack_post_kicker',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string',
+		)
+	);
+
+	register_post_meta(
+		'post',
 		'newspack_article_summary_title',
 		array(
 			'default'      => esc_html__( 'Overview:', 'newspack' ),
