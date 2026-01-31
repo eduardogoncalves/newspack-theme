@@ -278,9 +278,24 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 
 		// Add custom theme support - post subtitle
 		add_theme_support( 'post-subtitle' );
+
+		// Add custom theme support - post kicker
+		add_theme_support( 'post-kicker' );
 	}
 endif;
 add_action( 'after_setup_theme', 'newspack_setup' );
+
+/**
+ * Filter to override category display with kicker if available.
+ */
+function newspack_override_categories_with_kicker( $categories_list ) {
+	$kicker = get_post_meta( get_the_ID(), 'newspack_post_kicker', true );
+	if ( ! empty( $kicker ) ) {
+		return '<span class="post-kicker">' . esc_html( $kicker ) . '</span>';
+	}
+	return $categories_list;
+}
+add_filter( 'newspack_theme_categories', 'newspack_override_categories_with_kicker' );
 
 /**
  * Register widget area.
@@ -587,6 +602,9 @@ function newspack_enqueue_scripts() {
 		wp_enqueue_script( 'newspack-post-subtitle', get_theme_file_uri( '/js/dist/post-subtitle.js' ), array(), $theme_version, true );
 		wp_set_script_translations( 'newspack-post-subtitle', 'newspack', $languages_path );
 
+		wp_enqueue_script( 'newspack-post-kicker', get_theme_file_uri( '/js/dist/post-kicker.js' ), array(), $theme_version, true );
+		wp_set_script_translations( 'newspack-post-kicker', 'newspack', $languages_path );
+
 		wp_enqueue_script( 'newspack-post-summary', get_theme_file_uri( '/js/dist/post-summary.js' ), array(), $theme_version, true );
 		wp_set_script_translations( 'newspack-post-summary', 'newspack', $languages_path );
 
@@ -868,6 +886,16 @@ function newspack_register_meta() {
 	register_post_meta(
 		'post',
 		'newspack_post_subtitle',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string',
+		)
+	);
+
+	register_post_meta(
+		'post',
+		'newspack_post_kicker',
 		array(
 			'show_in_rest' => true,
 			'single'       => true,
