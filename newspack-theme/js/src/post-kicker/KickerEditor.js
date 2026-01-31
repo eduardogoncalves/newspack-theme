@@ -27,9 +27,14 @@ const decorate = compose(
 const KickerEditor = ( { kicker, saveKicker } ) => {
 	const [ value, setValue ] = useState( kicker );
 
+	// Sync local state with kicker prop when it changes
+	useEffect( () => {
+		setValue( kicker );
+	}, [ kicker ] );
+
 	useEffect( () => {
 		saveKicker( value );
-	}, [ value ] );
+	}, [ value, saveKicker ] );
 
 	return (
 		<TextareaControl

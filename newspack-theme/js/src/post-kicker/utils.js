@@ -29,7 +29,7 @@ export const appendKickerToTitleDOMElement = ( kicker, isInCodeEditor ) => {
 			}
 			titleEl.insertBefore( kickerEl, titleEl.firstChild );
 		}
-		kickerEl.innerHTML = kicker;
+		kickerEl.textContent = kicker;
 	}
 };
 
